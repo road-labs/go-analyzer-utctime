@@ -8,8 +8,32 @@ This linter helps prevent timezone-related bugs by ensuring that all `time.Now()
 
 ## Installation
 
+This linter uses the golangci-lint [Module Plugin System](https://golangci-lint.run/docs/plugins/module-plugins/).
+
+1. Create a `.custom-gcl.yml` file in your project root:
+
+```yaml
+version: v2.6.2  # Use your desired golangci-lint version
+
+plugins:
+  - module: 'github.com/road-labs/go-analyzer-utctime'
+    version: latest  # or specify a version tag
+```
+
+2. Build a custom golangci-lint binary with the plugin:
+
 ```bash
-go install github.com/nirvana-labs/go-analyzer-utctime@latest
+$ golangci-lint custom
+```
+
+This will create a `./custom-gcl` binary that includes the plugin.
+
+3. Configure the plugin in your `.golangci.yml` (see Usage section below).
+
+4. Run your custom golangci-lint binary:
+
+```bash
+$ ./custom-gcl run
 ```
 
 ## Usage
