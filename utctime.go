@@ -3,6 +3,7 @@ package utctime
 import (
 	"go/ast"
 
+	"github.com/golangci/plugin-module-register/register"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 )
@@ -10,11 +11,27 @@ import (
 const linterName = "utctime"
 const linterDoc = "Checks that time.Now() is followed by .UTC()"
 
-var Analyzer = &analysis.Analyzer{
-	Name:     linterName,
-	Doc:      linterDoc,
-	Run:      run,
-	Requires: []*analysis.Analyzer{inspect.Analyzer},
+type Plugin struct{}
+
+func New(settings any) (register.LinterPlugin, error) {
+	return &Plugin{}, nil
+}
+
+func (p *Plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
+	return []*analysis.Analyzer{&analysis.Analyzer{
+		Name:     linterName,
+		Doc:      linterDoc,
+		Run:      run,
+		Requires: []*analysis.Analyzer{inspect.Analyzer},
+	}}, nil
+}
+
+func (p *Plugin) GetLoadMode() string {
+	return register.LoadModeSyntax
+}
+
+func init() {
+	register.Plugin(linterName, New)
 }
 
 // isTimeNowUTC checks if a selector expression represents time.Now().UTC().

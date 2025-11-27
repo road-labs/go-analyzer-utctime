@@ -10,7 +10,18 @@ import (
 
 func TestFromTestdata(t *testing.T) {
 	testdata := analysistest.TestData()
-	analysistest.Run(t, testdata, Analyzer, "utctime")
+
+	plugin, err := New(nil)
+	if err != nil {
+		t.Fatalf("failed to create plugin: %v", err)
+	}
+
+	analyzers, err := plugin.BuildAnalyzers()
+	if err != nil {
+		t.Fatalf("failed to build analyzers: %v", err)
+	}
+
+	analysistest.Run(t, testdata, analyzers[0], "utctime")
 }
 
 func TestIsTimeNowUTC(t *testing.T) {

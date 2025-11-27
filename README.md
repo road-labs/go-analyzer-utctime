@@ -17,14 +17,16 @@ go install github.com/nirvana-labs/go-analyzer-utctime@latest
 Add the linter to your `.golangci.yml` configuration:
 
 ```yaml
+version: "2"
+
 linters:
   enable:
     - utctime
-
-linters-settings:
-  custom:
-    utctime:
-      path: github.com/nirvana-labs/go-analyzer-utctime
+  settings:
+    custom:
+      utctime:
+        type: module
+        description: Checks that time.Now() is followed by .UTC()
 ```
 
 ## Examples
